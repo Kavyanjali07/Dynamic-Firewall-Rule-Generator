@@ -1,0 +1,9 @@
+{
+    "scan_interval": 5,
+    "port_scan_threshold": 10,
+    "auto_block_enabled": true,
+    "log_level": "INFO",
+    "database_path": "network_security.db",
+    "max_log_entries": 10000,
+    "alert_retention_days": 30
+}
