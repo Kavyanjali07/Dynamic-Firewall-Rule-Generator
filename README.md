@@ -22,66 +22,58 @@ The **Dynamic Firewall Rule Generator** actively monitors network packets in rea
 ---
 
 **⚙️ How It Works**
->Start Monitoring: The user starts traffic monitoring from the GUI.
->>>>>>> 7d2008e (.)
+- Start Monitoring: The user starts traffic monitoring from the GUI.
 
->Traffic Analysis: The system uses tools like scapy and psutil to inspect network traffic.
+- Traffic Analysis: The system uses tools like scapy and psutil to inspect network traffic.
 
->Anomaly Detection: Based on thresholds from config.json, suspicious activity is flagged.
+- Anomaly Detection: Based on thresholds from config.json, suspicious activity is flagged.
 
->Firewall Rule Generation: A rule is generated and applied using iptables.
+- Firewall Rule Generation: A rule is generated and applied using iptables.
 
->Logging: All events and rules are logged into network_security.db.
+- Logging: All events and rules are logged into network_security.db.
 
-<<<<<<< HEAD
 #🚀 Usage Instructions
 📥 1. Clone the Repository
-bash
-Copy
-Edit
-git clone https://github.com/your-username/dynamic-firewall.git
-cd dynamic-firewall
+- bash
+- Copy
+- Edit
+- git clone https://github.com/your-username/dynamic-firewall.git
+- cd dynamic-firewall
 
 🛠️ 2. Create Virtual Environment (Kali/Ubuntu)
-bash
-Copy
-Edit
-sudo apt install python3.13-venv
-python3 -m venv venv
-source venv/bin/activate
+- bash
+- Copy
+- Edit
+- sudo apt install python3.13-venv
+- python3 -m venv venv
+- source venv/bin/activate
 
 🔧 3. Install Requirements
-bash
-Copy
-Edit
-pip install -r requirements.txt
-# or install manually:
-pip install flask flask_sqlalchemy scapy psutil
+- bash
+- Copy
+- Edit
+- pip install -r requirements.txt
+
+ or install manually:
+- pip install flask flask_sqlalchemy scapy psutil
 
 🔒 4. Run the Application
-bash
-Copy
-Edit
-sudo python3 gui.py
+- bash
+- Copy
+- Edit
+- sudo python3 gui.py
+
 🔐 sudo is required because firewall manipulation via iptables needs root access.
 
 #📦 Dependencies
-Python 3.10+
+- Python 3.10+
+- Flask / Tkinter
+- SQLite3
+- iptables
+- scapy (for packet analysis)
+- psutil (for process & port mapping)
 
-Flask / Tkinter
-
-SQLite3
-
-iptables
-
-scapy (for packet analysis)
-
-psutil (for process & port mapping)
-
-#🧠 Architecture Sketch
-=======
 #🧠 Architecture Sketch**
->>>>>>> 7d2008e (.)
 
           +---------------------+
           |  GUI (gui.py)       |
@@ -96,7 +88,6 @@ psutil (for process & port mapping)
         +------------+-------------+
         |                          |
         v                          v
-<<<<<<< HEAD
         +---------------+        +--------------------+
         | config.json   |        |network_security.db |
         +---------------+        +--------------------+
@@ -107,69 +98,7 @@ psutil (for process & port mapping)
      +----------------------+
 
 #👨‍💻 Developer Notes
-This tool works best in Linux environments.
-The rule generator is kept simple now but can be integrated with ML-based detection.
-All configuration is done through config.json — you can change thresholds without touching the code.
-Check logs in network_security.db using any SQLite viewer.
-=======
-    +---------------+        +--------------------+
-    | config.json   |        |network_security.db |
-    +---------------+        +--------------------+
-            |
-            v
-    +----------------------+
-    |  iptables (Firewall) |
-    +----------------------+
-
-**🚀 Usage Instructions**
-#📥 1. Clone the Repository
->bash
->Copy
->Edit
->git clone https://github.com/your-username/dynamic-firewall.git
->cd dynamic-firewall
-
-#🛠️ 2. Create Virtual Environment (Kali/Ubuntu)
->bash
->Copy
->Edit
->sudo apt install python3.13-venv
->python3 -m venv venv
->source venv/bin/activate
-
-#🔧 3. Install Requirements
->bash
->Copy
->Edit
->pip install -r requirements.txt
-
- or install manually:
->pip install flask flask_sqlalchemy scapy psutil
-
-#🔒 4. Run the Application
->bash
->Copy
->Edit
->sudo python3 gui.py
-🔐 sudo is required because firewall manipulation via iptables needs root access.
-
-**📦 Dependencies**
->Python 3.10+
->Flask / Tkinter
->SQLite3
->iptables
->scapy (for packet analysis)
->psutil (for process & port mapping)
-
-
-**👨‍💻 Developer Notes**
->This tool works best in Linux environments.
-
->The rule generator is kept simple now but can be integrated with ML-based detection.
-
->All configuration is done through config.json — you can change thresholds without touching the code.
-
->Check logs in network_security.db using any SQLite viewer.
-
-
->>>>>>> 7d2008e (.)
+- This tool works best in Linux environments.
+- The rule generator is kept simple now but can be integrated with ML-based detection.
+- All configuration is done through config.json — you can change thresholds without touching the code.
+- Check logs in network_security.db using any SQLite viewer.
