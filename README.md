@@ -102,3 +102,39 @@ The **Dynamic Firewall Rule Generator** actively monitors network packets in rea
 - The rule generator is kept simple now but can be integrated with ML-based detection.
 - All configuration is done through config.json — you can change thresholds without touching the code.
 - Check logs in network_security.db using any SQLite viewer.
+
+#Future Enhancements
+
+1. 🧠 Integrate Machine Learning
+- Use supervised or unsupervised learning to classify suspicious behavior.
+- Learn from traffic patterns, not just static logic.
+- Auto-improve over time (example: scikit-learn + pre-labeled data).
+
+2. 🌐 Web-based Dashboard
+- Replace the local GUI with a Flask/React web dashboard.
+- Remote control over the firewall from a browser.
+
+3. ☁️ Cloud or Remote Log Aggregation
+- Send logs to a remote server (via secure channels).
+- Visualize traffic trends and suspicious activity over time.
+
+4. 🔄 Auto Rule Reversal
+- Automatically remove temporary blocks after a timeout period (if IPs behave later).
+
+5. 🧪 More Protocol Analysis
+- Deep Packet Inspection (DPI) to analyze packet payloads.
+- Filter based on payload anomalies, not just IPs and ports.
+
+6. 🔐 User Authentication + Multi-User Support
+- Secure access to GUI using login credentials.
+- Different roles: admin, viewer, analyst.
+
+7. 📦 Package It
+- Convert it into a pip-installable package or even a .deb installer.
+- Include a one-click launcher for easier execution.
+
+8. 📡 Threat Intelligence Feed Integration
+- Cross-reference real-time data with public threat feeds like:
+- AlienVault OTX
+- AbuseIPDB
+- FireHOL blocklists
