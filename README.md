@@ -94,7 +94,7 @@ The checked-in `config.json` currently contains:
 |---|---|---:|
 | `scan_interval` | Monitoring interval in seconds | `5` |
 | `port_scan_threshold` | Port-count threshold used by the detector | `10` |
-| `auto_block_enabled` | Enables automatic blocking behaviour | `true` |
+| `auto_block_enabled` | Enables automatic blocking behaviour | `false` |
 | `log_level` | Logging verbosity | `INFO` |
 | `database_path` | SQLite database path | `network_security.db` |
 | `max_log_entries` | Log-entry retention limit | `10000` |
