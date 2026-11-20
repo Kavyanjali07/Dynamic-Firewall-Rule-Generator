@@ -1,140 +1,132 @@
-# 🔥 Dynamic Firewall Rule Generator
+# Dynamic Firewall Rule Generator
 
-A Python-based GUI tool designed to monitor live network traffic, detect anomalies, and dynamically generate and apply firewall rules using `iptables`. Built with a strong emphasis on system security, usability, and extensibility.
+A Python desktop application that monitors active network connections, flags heuristic anomalies, and can create firewall rules through operating-system firewall commands.
 
----
-## 🧠 Overview
+> **Status:** Experimental security project. Detection is heuristic, not a validated intrusion-detection system. Run it only on systems and networks you own or are explicitly authorised to administer. Test rule changes in a disposable lab or virtual machine before using them on a host you depend on.
 
-The **Dynamic Firewall Rule Generator** actively monitors network packets in real-time. It detects suspicious activity, such as unauthorized IPs or unusual traffic, and generates firewall rules automatically to block threats on-the-fly.
+## What it does
 
----
-## ✨ Key Features
+The application combines a Tkinter interface, connection monitoring with `psutil`, configurable anomaly thresholds, SQLite persistence, and firewall rule management.
 
-- Real-time network packet monitoring
-- Anomaly detection based on IP, port, and protocol behavior
-- GUI interface for ease of use (built with `Tkinter`)
-- Stores firewall rules in `SQLite` databases
-- Applies rules using Linux `iptables`
-- Configurable thresholds using `config.json`
-- Threaded performance to avoid GUI freeze
-- Log file for audit and debugging
+### Implemented components
 
----
+- **Connection monitoring:** Reads active Internet connections and associated process information through `psutil`.
+- **Heuristic anomaly checks:** Tracks remote ports and connection rates, then flags patterns such as repeated port access and unusually high connection counts.
+- **Desktop interface:** Provides a Tkinter GUI for interacting with monitoring and rule-management workflows.
+- **Firewall integration:** Uses Windows `netsh advfirewall` commands on Windows and `iptables` on Linux.
+- **Persistence:** Stores generated firewall rules and related state in SQLite.
+- **Configuration:** Reads thresholds and application options from `config.json`.
 
-**⚙️ How It Works**
-- Start Monitoring: The user starts traffic monitoring from the GUI.
+The current detection logic uses simple thresholds and connection metadata. It does not establish that a host is malicious, inspect encrypted application payloads, or provide machine-learning-based threat classification.
 
-- Traffic Analysis: The system uses tools like scapy and psutil to inspect network traffic.
+## How the workflow fits together
 
-- Anomaly Detection: Based on thresholds from config.json, suspicious activity is flagged.
+```mermaid
+flowchart TD
+    A[Start monitoring] --> B[Read active connections with psutil]
+    B --> C[Track ports and connection rates]
+    C --> D[Apply configured heuristic checks]
+    D --> E{Anomaly detected?}
+    E -- No --> B
+    E -- Yes --> F[Create candidate firewall rule]
+    F --> G[Apply through Windows netsh or Linux iptables]
+    G --> H[Record rule state in SQLite]
+```
 
-- Firewall Rule Generation: A rule is generated and applied using iptables.
+## Technology
 
-- Logging: All events and rules are logged into network_security.db.
+- Python 3
+- Tkinter
+- psutil
+- SQLite
+- JSON configuration
+- Windows Firewall command-line tooling (`netsh`)
+- Linux `iptables`
 
-#🚀 Usage Instructions
-📥 1. Clone the Repository
-- bash
-- Copy
-- Edit
-- git clone https://github.com/your-username/dynamic-firewall.git
-- cd dynamic-firewall
+Most imports used by the main application are from the Python standard library. The third-party runtime dependency visible in `gui.py` is `psutil`.
 
-🛠️ 2. Create Virtual Environment (Kali/Ubuntu)
-- bash
-- Copy
-- Edit
-- sudo apt install python3.13-venv
-- python3 -m venv venv
-- source venv/bin/activate
+## Requirements
 
-🔧 3. Install Requirements
-- bash
-- Copy
-- Edit
-- pip install -r requirements.txt
+- Python 3.10 or newer
+- `psutil`
+- Tkinter support for your Python installation
+- Windows with Windows Defender Firewall tooling, or Linux with `iptables`
+- Administrative privileges when applying firewall changes
 
- or install manually:
-- pip install flask flask_sqlalchemy scapy psutil
+On Debian/Ubuntu/Parrot OS, install the GUI and Python package support:
 
-🔒 4. Run the Application
-- bash
-- Copy
-- Edit
-- sudo python3 gui.py
+```bash
+sudo apt update
+sudo apt install python3-tk python3-venv iptables
+```
 
-🔐 sudo is required because firewall manipulation via iptables needs root access.
+## Run locally
 
-#📦 Dependencies
-- Python 3.10+
-- Flask / Tkinter
-- SQLite3
-- iptables
-- scapy (for packet analysis)
-- psutil (for process & port mapping)
+Clone the repository:
 
-#🧠 Architecture Sketch**
+```bash
+git clone https://github.com/Kavyanjali07/Dynamic-Firewall-Rule-Generator.git
+cd Dynamic-Firewall-Rule-Generator
+```
 
-          +---------------------+
-          |  GUI (gui.py)       |
-          +----------+----------+
-                     |
-                     v
-          +---------------------+
-          |  Core Logic         |
-          |  (DynamicRule.py)   |
-          +----------+----------+
-                     |
-        +------------+-------------+
-        |                          |
-        v                          v
-        +---------------+        +--------------------+
-        | config.json   |        |network_security.db |
-        +---------------+        +--------------------+
-               |
-               v
-     +----------------------+
-     |  iptables (Firewall) |
-     +----------------------+
+Create and activate a virtual environment:
 
-#👨‍💻 Developer Notes
-- This tool works best in Linux environments.
-- The rule generator is kept simple now but can be integrated with ML-based detection.
-- All configuration is done through config.json — you can change thresholds without touching the code.
-- Check logs in network_security.db using any SQLite viewer.
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install psutil
+```
 
-#Future Enhancements
+Start the application:
 
-1. 🧠 Integrate Machine Learning
-- Use supervised or unsupervised learning to classify suspicious behavior.
-- Learn from traffic patterns, not just static logic.
-- Auto-improve over time (example: scikit-learn + pre-labeled data).
+```bash
+python gui.py
+```
 
-2. 🌐 Web-based Dashboard
-- Replace the local GUI with a Flask/React web dashboard.
-- Remote control over the firewall from a browser.
+The application may request elevated privileges when it applies firewall rules. Review the command and target before approving any privileged operation.
 
-3. ☁️ Cloud or Remote Log Aggregation
-- Send logs to a remote server (via secure channels).
-- Visualize traffic trends and suspicious activity over time.
+## Configuration
 
-4. 🔄 Auto Rule Reversal
-- Automatically remove temporary blocks after a timeout period (if IPs behave later).
+The checked-in `config.json` currently contains:
 
-5. 🧪 More Protocol Analysis
-- Deep Packet Inspection (DPI) to analyze packet payloads.
-- Filter based on payload anomalies, not just IPs and ports.
+| Setting | Purpose | Current value |
+|---|---|---:|
+| `scan_interval` | Monitoring interval in seconds | `5` |
+| `port_scan_threshold` | Port-count threshold used by the detector | `10` |
+| `auto_block_enabled` | Enables automatic blocking behaviour | `true` |
+| `log_level` | Logging verbosity | `INFO` |
+| `database_path` | SQLite database path | `network_security.db` |
+| `max_log_entries` | Log-entry retention limit | `10000` |
+| `alert_retention_days` | Alert retention period | `30` |
 
-6. 🔐 User Authentication + Multi-User Support
-- Secure access to GUI using login credentials.
-- Different roles: admin, viewer, analyst.
+**Safety recommendation:** Set `auto_block_enabled` to `false` while learning the application or validating detection behaviour. Review every proposed rule before enabling automatic blocking.
 
-7. 📦 Package It
-- Convert it into a pip-installable package or even a .deb installer.
-- Include a one-click launcher for easier execution.
+## Important security considerations
 
-8. 📡 Threat Intelligence Feed Integration
-- Cross-reference real-time data with public threat feeds like:
-- AlienVault OTX
-- AbuseIPDB
-- FireHOL blocklists
+- Incorrect blocking decisions can interrupt SSH, remote administration, DNS, or other essential connectivity.
+- A high connection count or many accessed ports is only a heuristic signal; it is not proof of an attack.
+- Test in a VM or isolated lab and keep console access available before applying rules.
+- Review generated rules and the rule-removal path before relying on automatic expiry.
+- Use least privilege. Do not run the entire desktop application as root unless the implementation genuinely requires it.
+- The current implementation should be treated as a learning prototype, not as a replacement for a managed firewall or production network-security platform.
+
+## Known limitations and engineering work
+
+The project would benefit from additional validation before production use:
+
+- Unit tests for anomaly thresholds and firewall command construction
+- Safer privilege separation for firewall operations
+- Explicit rule ownership and unique rule identifiers for reliable removal
+- IPv6 handling and protocol/port validation
+- Dry-run mode and a visible approval step before applying rules
+- Structured audit logs and clearer failure reporting
+- Cross-platform integration tests
+- Documentation of supported firewall versions and permissions
+
+## Author
+
+**Kavyanjali**
+
+- [GitHub](https://github.com/Kavyanjali07)
+- [LinkedIn](https://www.linkedin.com/in/kavyanjali07)
